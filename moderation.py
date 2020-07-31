@@ -19,13 +19,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # -----------------------------------------------------------------------------
-def handlekick(msg,id):
-    ban_time=30*60
-    if len(msg)<2:
-        ba.screenmessage("No arguments provided!",transient=True,clients=[id])
-        return
-    if len(msg)<3:
-        ba.screenmessage("No ban time provided. Taking default=30min",transient=True,clients=[id])
-    kick_id=int(msg[1])
+import json,_ba,ba
+class KickCommand:
+    def __init__(self,msg,id,ban_time=30):
+        self.msg=msg
+        self.client_id=id
+        self.ban_time=ban_time*60
+        self.execute()
 
-    _ba.disconnect_client(client_id=kick_id, ban_time=ban_time)
+    def validate_command(self):
+        if len(self.msg)>2:
+            ba.screenmessage("Too many arguments",transient=True,clients=[self.client_id])
+            return False
+        return True
+
+    def execute(self):
+        kick_id=int(self.msg[1])
+        _ba.disconnect_client(client_id=kick_id, ban_time=self.ban_time)

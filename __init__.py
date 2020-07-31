@@ -19,10 +19,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # -----------------------------------------------------------------------------
-from chat_commands.moderation import handlekick
-from chat_commands.info import handleinfo,handlehelp
-import json,_ba,ba
+from chat_commands.moderation import KickCommand
+from chat_commands.info import InfoCommand,HelpCommand
+import _ba,ba
+
 ADMINS=['pb-IF4tVRAtLA==']
+COMMANDS=['kick','info','help']
+
 def handlemessage(msg,id):
     msg=msg[1:].split(" ")
     command_head=msg[0]
@@ -35,6 +38,8 @@ def handlemessage(msg,id):
                 return
             else:
                     if command_head=="kick":
-                        handlekick(msg,id)                  
+                        KickCommand(msg,id)                  
                     if command_head=="info":
-                        handleinfo(msg,id,roster)
+                        InfoCommand(msg,id,roster)
+                    if command_head=="help":
+                        HelpCommand()
