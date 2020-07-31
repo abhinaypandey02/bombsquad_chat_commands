@@ -19,27 +19,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # -----------------------------------------------------------------------------
+import _ba
+import ba
+from chat_commands.info import InfoCommand, HelpCommand
 from chat_commands.moderation import KickCommand
-from chat_commands.info import InfoCommand,HelpCommand
-import _ba,ba
 
-ADMINS=['pb-IF4tVRAtLA==']
-COMMANDS=['kick','info','help']
+ADMINS = ['pb-IF4tVRAtLA==']
+COMMANDS = ['kick', 'info', 'help']
 
-def handlemessage(msg,id):
-    msg=msg[1:].split(" ")
-    command_head=msg[0]
+
+def handlemessage(msg, id):
+    msg = msg[1:].split(" ")
+    command_head = msg[0]
     roster = _ba.get_game_roster()
     print(id)
     for i in roster:
-        if i['client_id'] ==id:
+        if i['client_id'] == id:
             if not i['account_id'] in ADMINS:
-                ba.screenmessage("You are not an admin!",transient=True,clients=[id])
-                return
+                ba.screenmessage("You are not an admin!", transient=True, clients=[id])
             else:
-                    if command_head=="kick":
-                        KickCommand(msg,id)                  
-                    if command_head=="info":
-                        InfoCommand(msg,id,roster)
-                    if command_head=="help":
-                        HelpCommand()
+                if command_head == "kick":
+                    KickCommand(msg, id)
+                if command_head == "info":
+                    InfoCommand(msg, id, roster)
+                if command_head == "help":
+                    HelpCommand()

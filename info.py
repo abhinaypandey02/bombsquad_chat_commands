@@ -19,29 +19,40 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # -----------------------------------------------------------------------------
-import json,ba
+import json
+
+import ba
+
+
 class HelpCommand:
     pass
+
+
 class InfoCommand:
-    def __init__(self,msg,id,roster):
-        self.msg=msg
-        self.client_id=id
-        self.roster=roster
-        self.infomessage=''
+    def __init__(self, msg, client_id, roster):
+        self.msg = msg
+        self.client_id = client_id
+        self.roster = roster
+        self.info_message = ''
         self.execute()
 
     def validate_command(self):
-        if len(self.msg)>2:
-            ba.screenmessage("Too many arguments",transient=True,clients=[self.client_id])
+        if len(self.msg) > 2:
+            ba.screenmessage("Too many arguments", transient=True, clients=[self.client_id])
             return False
         return True
 
     def execute(self):
-        if not self.validate_command():return
+        if not self.validate_command(): return
         for i in self.roster:
-            if i['client_id']==-1:continue
+            if i['client_id'] == -1: continue
             spec = json.loads(i['spec_string'])
-            player_names=[str(x['name']) for x in i['players']]
-            if len(self.msg)==1 or self.msg[1].lower() in spec['n'].lower() or self.msg[1].lower() in [x.lower() for x in player_names]:
-                self.infomessage+="*Account name:{0} *Client ID:{1} *Account ID:{2} *Players:{3}\n".format(str(spec['n']),str(i['client_id']),str(i['account_id']),str("/".join(player_names)))
-                ba.screenmessage(self.infomessage[:-1],transient=True,clients=[self.client_id])
+            player_names = [str(x['name']) for x in i['players']]
+            if len(self.msg) == 1 \
+                    or self.msg[1].lower() in spec['n'].lower() \
+                    or self.msg[1].lower() in [x.lower() for x in player_names]:
+                self.info_message += "*Account name:{spec['n']} " \
+                                     "*Client ID:{i['client_id']} " \
+                                     "*Account ID:{i['account_id']} " \
+                                     "*Players:{.join(player_names)}\n"
+                ba.screenmessage(self.info_message[:-1], transient=True, clients=[self.client_id])

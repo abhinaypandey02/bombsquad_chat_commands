@@ -19,20 +19,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # -----------------------------------------------------------------------------
-import json,_ba,ba
+import _ba
+import ba
+
+
 class KickCommand:
-    def __init__(self,msg,id,ban_time=30):
-        self.msg=msg
-        self.client_id=id
-        self.ban_time=ban_time*60
+    def __init__(self, msg, client_id, ban_time=30):
+        self.msg = msg
+        self.client_id = client_id
+        self.ban_time = ban_time * 60
         self.execute()
 
     def validate_command(self):
-        if len(self.msg)>2:
-            ba.screenmessage("Too many arguments",transient=True,clients=[self.client_id])
+        if len(self.msg) > 2:
+            ba.screenmessage("Too many arguments", transient=True, clients=[self.client_id])
             return False
         return True
 
     def execute(self):
-        kick_id=int(self.msg[1])
+        """
+
+        """
+        kick_id = int(self.msg[1])
         _ba.disconnect_client(client_id=kick_id, ban_time=self.ban_time)
