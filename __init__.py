@@ -19,28 +19,38 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # -----------------------------------------------------------------------------
+import json
+import os
+
 import _ba
-import ba
-from chat_commands.info import InfoCommand, HelpCommand
+from chat_commands.help import HelpCommand
+from chat_commands.info import InfoCommand
 from chat_commands.moderation import KickCommand
 
-ADMINS = ['pb-IF4tVRAtLA==']
-COMMANDS = ['kick', 'info', 'help']
+DIR = os.path.join(os.getcwd(), 'ba_root', 'mods', 'chat_commands')
+ACTIVE_COMMANDS = ['info', 'help']
+
+if not os.path.exists(os.path.join(DIR, 'ranks.json')):
+    with open(os.path.join(DIR, 'ranks.json'), "w+") as f:
+        f.write('{"ranks":{"admin":["pb-IF4tVRAtLA=="]}}')
+    RANKS = {}
+else:
+    with open(os.path.join(DIR, 'ranks.json'), "r") as f:
+        f_read = f.read()
+        if f_read == '':
+            f_read = '{}'
+    RANKS = json.loads(f_read)['ranks']
 
 
-def handlemessage(msg, id):
+def handlechatmessage(msg, client_id):
     msg = msg[1:].split(" ")
     command_head = msg[0]
     roster = _ba.get_game_roster()
-    print(id)
     for i in roster:
-        if i['client_id'] == id:
-            if not i['account_id'] in ADMINS:
-                ba.screenmessage("You are not an admin!", transient=True, clients=[id])
-            else:
-                if command_head == "kick":
-                    KickCommand(msg, id)
-                if command_head == "info":
-                    InfoCommand(msg, id, roster)
-                if command_head == "help":
-                    HelpCommand()
+        if i['client_id'] == client_id:
+            if command_head == "kick" and command_head in ACTIVE_COMMANDS:
+                KickCommand(msg, client_id, i['account_id'], RANKS)
+            if command_head == "info" and command_head in ACTIVE_COMMANDS:
+                InfoCommand(msg, client_id, roster, i['account_id'], RANKS)
+            if command_head == "help" and command_head in ACTIVE_COMMANDS:
+                HelpCommand(msg, client_id, i['account_id'], RANKS, ACTIVE_COMMANDS)

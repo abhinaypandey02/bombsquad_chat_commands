@@ -24,19 +24,32 @@ import json
 import ba
 
 
-class HelpCommand:
-    pass
-
-
 class InfoCommand:
-    def __init__(self, msg, client_id, roster):
+    def __init__(self, msg, client_id, roster, account_id, ranks):
         self.msg = msg
         self.client_id = client_id
+        self.account_id = account_id
         self.roster = roster
         self.info_message = ''
+        self.ranks = ranks
+        self.permission = ['admin']
+
         self.execute()
 
+    @staticmethod
+    def commandhelp():
+        help_text = "Command to get info of any/every player on the server" \
+                    "\nUsage: /info <playername>(optional)" \
+                    "\nLeave <playername> empty for all player info."
+        return help_text
+
     def validate_command(self):
+        if self.permission:
+            for x in self.ranks:
+                if x in self.permission:
+                    if self.account_id in self.ranks[x]:
+                        return True
+            return False
         if len(self.msg) > 2:
             ba.screenmessage("Too many arguments", transient=True, clients=[self.client_id])
             return False
@@ -51,8 +64,8 @@ class InfoCommand:
             if len(self.msg) == 1 \
                     or self.msg[1].lower() in spec['n'].lower() \
                     or self.msg[1].lower() in [x.lower() for x in player_names]:
-                self.info_message += "*Account name:{spec['n']} " \
-                                     "*Client ID:{i['client_id']} " \
-                                     "*Account ID:{i['account_id']} " \
-                                     "*Players:{.join(player_names)}\n"
+                self.info_message += f"*Account name:{spec['n']} " \
+                                     f"*Client ID:{i['client_id']} " \
+                                     f"*Account ID:{i['account_id']} " \
+                                     f"*Players:{','.join(player_names)}\n"
                 ba.screenmessage(self.info_message[:-1], transient=True, clients=[self.client_id])

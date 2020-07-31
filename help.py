@@ -20,25 +20,20 @@
 # SOFTWARE.
 # -----------------------------------------------------------------------------
 
-import _ba
 import ba
+from chat_commands.info import InfoCommand
+from chat_commands.moderation import KickCommand
 
 
-class KickCommand:
-    def __init__(self, msg, client_id, account_id, ranks, ban_time=30):
+class HelpCommand:
+    def __init__(self, msg, client_id, account_id, ranks, commands):
         self.msg = msg
         self.client_id = client_id
-        self.ban_time = ban_time * 60
         self.account_id = account_id
         self.ranks = ranks
-        self.permission = ['admin']
+        self.permission = []
+        self.commands = commands
         self.execute()
-
-    @staticmethod
-    def commandhelp():
-        help_text = "Command to kick any player on the server" \
-                    "\nUsage: /kick <playername>(required)"
-        return help_text
 
     def validate_command(self):
         if self.permission:
@@ -53,5 +48,13 @@ class KickCommand:
         return True
 
     def execute(self):
-        kick_id = int(self.msg[1])
-        _ba.disconnect_client(client_id=kick_id, ban_time=self.ban_time)
+        if not self.validate_command(): return
+        if len(self.msg) == 1:
+            help_text = "Supported Commands: " + ', '.join(x for x in self.commands) \
+                        + "\nUse /help <command-name> for more info"
+
+            ba.screenmessage(help_text, transient=True, clients=[self.client_id])
+        else:
+            if self.msg[1] == "kick": help_text = KickCommand.commandhelp()
+            if self.msg[1] == "info": help_text = InfoCommand.commandhelp()
+            ba.screenmessage(help_text, transient=True, clients=[self.client_id])
