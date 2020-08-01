@@ -27,7 +27,7 @@ from bombsquad_chat_commands.help import HelpCommand
 from bombsquad_chat_commands.info import InfoCommand
 from bombsquad_chat_commands.moderation import KickCommand
 
-DIR = os.path.join(os.getcwd(), 'ba_root', 'mods', 'chat_commands')
+DIR = os.path.join(os.getcwd(), 'ba_root', 'mods', 'bombsquad_chat_commands')
 ACTIVE_COMMANDS = ['info', 'help']
 
 if not os.path.exists(os.path.join(DIR, 'ranks.json')):
