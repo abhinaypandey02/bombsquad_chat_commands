@@ -33,7 +33,6 @@ class InfoCommand:
         self.info_message = ''
         self.ranks = ranks
         self.permission = ['admin']
-
         self.execute()
 
     @staticmethod
@@ -69,3 +68,6 @@ class InfoCommand:
                                      f"*Account ID:{i['account_id']} " \
                                      f"*Players:{','.join(player_names)}\n"
                 ba.screenmessage(self.info_message[:-1], transient=True, clients=[self.client_id])
+                return
+        ba.screenmessage("No such player found!", transient=True, clients=[self.client_id])
+        ba.screenmessage(self.commandhelp(), transient=True, clients=[self.client_id])

@@ -23,9 +23,9 @@ import json
 import os
 
 import _ba
-from chat_commands.help import HelpCommand
-from chat_commands.info import InfoCommand
-from chat_commands.moderation import KickCommand
+from bombsquad_chat_commands.help import HelpCommand
+from bombsquad_chat_commands.info import InfoCommand
+from bombsquad_chat_commands.moderation import KickCommand
 
 DIR = os.path.join(os.getcwd(), 'ba_root', 'mods', 'chat_commands')
 ACTIVE_COMMANDS = ['info', 'help']
@@ -54,3 +54,4 @@ def handlechatmessage(msg, client_id):
                 InfoCommand(msg, client_id, roster, i['account_id'], RANKS)
             if command_head == "help" and command_head in ACTIVE_COMMANDS:
                 HelpCommand(msg, client_id, i['account_id'], RANKS, ACTIVE_COMMANDS)
+    print(1)

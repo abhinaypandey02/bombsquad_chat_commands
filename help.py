@@ -21,8 +21,8 @@
 # -----------------------------------------------------------------------------
 
 import ba
-from chat_commands.info import InfoCommand
-from chat_commands.moderation import KickCommand
+from bombsquad_chat_commands.info import InfoCommand
+from bombsquad_chat_commands.moderation import KickCommand
 
 
 class HelpCommand:
@@ -35,6 +35,11 @@ class HelpCommand:
         self.commands = commands
         self.execute()
 
+    def commandhelp(self):
+        help_text = "Supported Commands: " + ', '.join(x for x in self.commands) \
+                    + "\nUse /help <command-name> for more info"
+        return help_text
+
     def validate_command(self):
         if self.permission:
             for x in self.ranks:
@@ -44,17 +49,21 @@ class HelpCommand:
             return False
         if len(self.msg) > 2:
             ba.screenmessage("Too many arguments", transient=True, clients=[self.client_id])
+            ba.screenmessage(self.commandhelp(), transient=True, clients=[self.client_id])
             return False
         return True
 
     def execute(self):
         if not self.validate_command(): return
         if len(self.msg) == 1:
-            help_text = "Supported Commands: " + ', '.join(x for x in self.commands) \
-                        + "\nUse /help <command-name> for more info"
-
+            help_text = self.commandhelp()
             ba.screenmessage(help_text, transient=True, clients=[self.client_id])
         else:
-            if self.msg[1] == "kick": help_text = KickCommand.commandhelp()
-            if self.msg[1] == "info": help_text = InfoCommand.commandhelp()
+            if self.msg[1] == "kick":
+                help_text = KickCommand.commandhelp()
+            elif self.msg[1] == "info":
+                help_text = InfoCommand.commandhelp()
+            else:
+                ba.screenmessage("No such command", transient=True, clients=[self.client_id])
+                return
             ba.screenmessage(help_text, transient=True, clients=[self.client_id])
