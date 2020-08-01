@@ -58,7 +58,7 @@ class InfoCommand:
 
     def execute(self):
         if not self.validate_command(): return
-        found=False
+        found = False
         for i in self.roster:
             if i['client_id'] == -1: continue
             spec = json.loads(i['spec_string'])
@@ -66,12 +66,13 @@ class InfoCommand:
             if len(self.msg) == 1 \
                     or self.msg[1].lower() in spec['n'].lower() \
                     or self.msg[1].lower() in [x.lower() for x in player_names]:
-                found=True
+                found = True
                 self.info_message += f"*Account name:{spec['n']} " \
                                      f"*Client ID:{i['client_id']} " \
                                      f"*Account ID:{i['account_id']} " \
                                      f"*Players:{','.join(player_names)}\n"
-                ba.screenmessage(self.info_message[:-1], transient=True, clients=[self.client_id])
-        if not found:
+        if found:
+            ba.screenmessage(self.info_message[:-1], transient=True, clients=[self.client_id])
+        else:
             ba.screenmessage("No such player found!", transient=True, clients=[self.client_id])
             ba.screenmessage(self.commandhelp(), transient=True, clients=[self.client_id])
