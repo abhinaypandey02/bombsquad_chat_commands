@@ -46,6 +46,8 @@ class HelpCommand:
                 if x in self.permission:
                     if self.account_id in self.ranks[x]:
                         return True
+            ba.screenmessage("You Don't have permission to use this command!", transient=True,
+                             clients=[self.client_id])
             return False
         if len(self.msg) > 2:
             ba.screenmessage("Too many arguments", transient=True, clients=[self.client_id])
