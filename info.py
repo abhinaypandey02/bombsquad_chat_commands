@@ -32,7 +32,7 @@ class InfoCommand:
         self.roster = roster
         self.info_message = ''
         self.ranks = ranks
-        self.permission = ['admin']
+        self.permission = []
         self.execute()
 
     @staticmethod

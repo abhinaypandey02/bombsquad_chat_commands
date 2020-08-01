@@ -28,12 +28,12 @@ from bombsquad_chat_commands.info import InfoCommand
 from bombsquad_chat_commands.moderation import KickCommand
 
 DIR = os.path.join(os.getcwd(), 'ba_root', 'mods', 'bombsquad_chat_commands')
-ACTIVE_COMMANDS = ['info', 'help']
+ACTIVE_COMMANDS = ['info', 'help', 'kick']
 
 if not os.path.exists(os.path.join(DIR, 'ranks.json')):
     with open(os.path.join(DIR, 'ranks.json'), "w+") as f:
         f.write('{"ranks":{"admin":["pb-IF4tVRAtLA=="]}}')
-    RANKS = {}
+    RANKS = {"admin": ["pb-IF4tVRAtLA=="]}
 else:
     with open(os.path.join(DIR, 'ranks.json'), "r") as f:
         f_read = f.read()
@@ -54,4 +54,3 @@ def handlechatmessage(msg, client_id):
                 InfoCommand(msg, client_id, roster, i['account_id'], RANKS)
             if command_head == "help" and command_head in ACTIVE_COMMANDS:
                 HelpCommand(msg, client_id, i['account_id'], RANKS, ACTIVE_COMMANDS)
-    print(1)
