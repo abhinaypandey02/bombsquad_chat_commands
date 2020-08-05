@@ -3,4 +3,12 @@
 Clone the repo in the mods folder.
 
 In python/ba/_hooks.py 
-  add `if len(msg) > 1 and msg[0] == '/':handlechatmessage(msg, client_id)` as the first line in `filter_chat_message()`
+  add:
+  
+      from bombsquad_chat_commands import BombsquadChatCommands
+  
+      BombsquadChatCommands(msg,client_id).handlechatmessage()
+   
+  at the start of `filter_chat_message()`
+
+Edit the __init__.py file and add your id as owner
