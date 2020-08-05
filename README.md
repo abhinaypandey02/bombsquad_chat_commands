@@ -11,4 +11,4 @@ In python/ba/_hooks.py
    
   at the start of `filter_chat_message()`
 
-Edit the __init__.py file and add your id as owner
+Edit the \_\_init__.py file and add your id as owner
