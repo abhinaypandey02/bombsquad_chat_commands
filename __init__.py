@@ -37,7 +37,7 @@ from bombsquad_chat_commands.ranks import RanksCommand, PermissionsCommand
 ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True),
                    (RanksCommand, False), (PermissionsCommand, False)]
 DIR = __file__.replace(os.path.basename(__file__), '')
-OWNER = "pb-IF4tVRAtLA=="
+OWNER = ["pb-IF4tVRAtLA=="]
 
 
 def client_to_account(client_id):
@@ -78,7 +78,7 @@ class BombsquadChatCommands:
         if account_id:
             for command in ACTIVE_COMMANDS:
                 if self.command_head == command[0].head:
-                    if command[1] or account_id == OWNER:
+                    if command[1] or account_id in OWNER:
                         command[0](self.msg, self.client_id, account_id, self.RANKS)
                         return
                     for x, rank in self.RANKS.items():
