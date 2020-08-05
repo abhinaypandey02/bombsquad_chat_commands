@@ -21,19 +21,21 @@
 # -----------------------------------------------------------------------------
 import json
 
+import _ba
 import ba
 
 
 class InfoCommand:
-    def __init__(self, msg, client_id, roster, account_id, ranks):
-        self.msg = msg
+    head = "info"
+
+    def __init__(self, msg, client_id, account_id, ranks):
+        self.msg=[x.lower() for x in msg]
         self.client_id = client_id
         self.account_id = account_id
-        self.roster = roster
+        self.roster = _ba.get_game_roster()
         self.info_message = ''
         self.ranks = ranks
-        self.permission = []
-        self.execute()
+        if self.validate_command(): self.execute()
 
     @staticmethod
     def commandhelp():
@@ -41,23 +43,18 @@ class InfoCommand:
                     "\nUsage: /info <playername>(optional)" \
                     "\nLeave <playername> empty for all player info."
         return help_text
-
+    def on_error_command(self):
+        ba.screenmessage(f"Use '/help {self.head}' for help about this command", transient=True,
+                         clients=[self.client_id])
     def validate_command(self):
-        if self.permission:
-            for x in self.ranks:
-                if x in self.permission:
-                    if self.account_id in self.ranks[x]:
-                        return True
-            ba.screenmessage("You Don't have permission to use this command!", transient=True,
-                             clients=[self.client_id])
-            return False
+
         if len(self.msg) > 2:
             ba.screenmessage("Too many arguments", transient=True, clients=[self.client_id])
+            self.on_error_command()
             return False
         return True
 
     def execute(self):
-        if not self.validate_command(): return
         found = False
         for i in self.roster:
             if i['client_id'] == -1: continue
@@ -75,4 +72,4 @@ class InfoCommand:
             ba.screenmessage(self.info_message[:-1], transient=True, clients=[self.client_id])
         else:
             ba.screenmessage("No such player found!", transient=True, clients=[self.client_id])
-            ba.screenmessage(self.commandhelp(), transient=True, clients=[self.client_id])
+            self.on_error_command()

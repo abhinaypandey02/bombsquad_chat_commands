@@ -21,51 +21,43 @@
 # -----------------------------------------------------------------------------
 
 import ba
-from bombsquad_chat_commands.info import InfoCommand
-from bombsquad_chat_commands.moderation import KickCommand
+import bombsquad_chat_commands
 
 
 class HelpCommand:
-    def __init__(self, msg, client_id, account_id, ranks, commands):
-        self.msg = msg
+    head = "help"
+
+    def __init__(self, msg, client_id, account_id, ranks):
+        self.msg=[x.lower() for x in msg]
         self.client_id = client_id
         self.account_id = account_id
         self.ranks = ranks
-        self.permission = []
-        self.commands = commands
-        self.execute()
+
+        self.commands = bombsquad_chat_commands.ACTIVE_COMMANDS
+
+        if self.validate_command(): self.execute()
 
     def commandhelp(self):
-        help_text = "Supported Commands: " + ', '.join(x for x in self.commands) \
-                    + "\nUse /help <command-name> for more info"
-        return help_text
-
+        help_text = "Supported Commands: " + ', '.join(x[0].head for x in self.commands) \
+                    + "\nUse '/help <command-name>' for more info"
+        ba.screenmessage(help_text, transient=True, clients=[self.client_id])
+    def on_error_command(self):
+        ba.screenmessage("Use '/help <command-name>' for more info", transient=True,
+                         clients=[self.client_id])
     def validate_command(self):
-        if self.permission:
-            for x in self.ranks:
-                if x in self.permission:
-                    if self.account_id in self.ranks[x]:
-                        return True
-            ba.screenmessage("You Don't have permission to use this command!", transient=True,
-                             clients=[self.client_id])
-            return False
         if len(self.msg) > 2:
             ba.screenmessage("Too many arguments", transient=True, clients=[self.client_id])
-            ba.screenmessage(self.commandhelp(), transient=True, clients=[self.client_id])
+            self.on_error_command()
             return False
         return True
 
     def execute(self):
-        if not self.validate_command(): return
         if len(self.msg) == 1:
-            help_text = self.commandhelp()
-            ba.screenmessage(help_text, transient=True, clients=[self.client_id])
+            self.commandhelp()
         else:
-            if self.msg[1] == "kick":
-                help_text = KickCommand.commandhelp()
-            elif self.msg[1] == "info":
-                help_text = InfoCommand.commandhelp()
-            else:
-                ba.screenmessage("No such command", transient=True, clients=[self.client_id])
-                return
-            ba.screenmessage(help_text, transient=True, clients=[self.client_id])
+            for command in self.commands:
+                if self.msg[1] == command[0].head and not self.msg[1]==self.head:
+                    ba.screenmessage(command[0].commandhelp(), transient=True, clients=[self.client_id])
+                    return
+            ba.screenmessage("No such command", transient=True, clients=[self.client_id])
+            self.commandhelp()
