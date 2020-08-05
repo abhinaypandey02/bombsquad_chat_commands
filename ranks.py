@@ -30,9 +30,9 @@ class RanksCommand:
     head = "ranks"
 
     def __init__(self, msg, client_id, account_id, ranks):
-        self.msg=[x.lower() for x in msg]
-        if len(self.msg)==5 and self.msg[1]=='addplayer':
-            self.msg[4]=msg[4]
+        self.msg = [x.lower() for x in msg]
+        if len(self.msg) == 5 and self.msg[1] == 'addplayer':
+            self.msg[4] = msg[4]
         self.client_id = client_id
         self.account_id = account_id
         self.info_message = ''
@@ -51,9 +51,11 @@ class RanksCommand:
                     "\nFor Rank Info : /ranks info" \
                     "\nNote: Player names and Rank names should NOT contain spaces"
         return help_text
+
     def on_error_command(self):
         ba.screenmessage(f"Use '/help {self.head}' for help about this command", transient=True,
                          clients=[self.client_id])
+
     def validate_command(self):
         if len(self.msg) == 1:
             ba.screenmessage("No arguments found", transient=True, clients=[self.client_id])
@@ -174,6 +176,7 @@ class PermissionsCommand:
                     "\nTo Remove Permission : /perm remove <rank_name> <command>" \
                     "\nFor Permission Info : /perm info"
         return help_text
+
     def on_error_command(self):
         ba.screenmessage(f"Use '/help {self.head}' for help about this command", transient=True,
                          clients=[self.client_id])

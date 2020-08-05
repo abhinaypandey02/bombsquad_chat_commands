@@ -31,13 +31,14 @@ import ba
 from bombsquad_chat_commands.help import HelpCommand
 from bombsquad_chat_commands.info import InfoCommand
 from bombsquad_chat_commands.moderation import KickCommand
-from bombsquad_chat_commands.ranks import RanksCommand,PermissionsCommand
+from bombsquad_chat_commands.ranks import RanksCommand, PermissionsCommand
 
-#The boolean specifies if the command is available for all
+# The boolean specifies if the command is available for all
 ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True),
-                   (RanksCommand, False),(PermissionsCommand,False)]
+                   (RanksCommand, False), (PermissionsCommand, False)]
 DIR = __file__.replace(os.path.basename(__file__), '')
-OWNER="pb-IF4tVRAtLA=="
+OWNER = "pb-IF4tVRAtLA=="
+
 
 def client_to_account(client_id):
     for i in _ba.get_game_roster():
@@ -77,10 +78,10 @@ class BombsquadChatCommands:
         if account_id:
             for command in ACTIVE_COMMANDS:
                 if self.command_head == command[0].head:
-                    if command[1] or account_id ==OWNER:
+                    if command[1] or account_id == OWNER:
                         command[0](self.msg, self.client_id, account_id, self.RANKS)
                         return
-                    for x,rank in self.RANKS.items():
+                    for x, rank in self.RANKS.items():
 
                         if self.command_head in rank['permissions']:
                             if account_id in rank['players']:

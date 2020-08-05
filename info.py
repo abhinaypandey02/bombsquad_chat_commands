@@ -29,7 +29,7 @@ class InfoCommand:
     head = "info"
 
     def __init__(self, msg, client_id, account_id, ranks):
-        self.msg=[x.lower() for x in msg]
+        self.msg = [x.lower() for x in msg]
         self.client_id = client_id
         self.account_id = account_id
         self.roster = _ba.get_game_roster()
@@ -43,9 +43,11 @@ class InfoCommand:
                     "\nUsage: /info <playername>(optional)" \
                     "\nLeave <playername> empty for all player info."
         return help_text
+
     def on_error_command(self):
         ba.screenmessage(f"Use '/help {self.head}' for help about this command", transient=True,
                          clients=[self.client_id])
+
     def validate_command(self):
 
         if len(self.msg) > 2:

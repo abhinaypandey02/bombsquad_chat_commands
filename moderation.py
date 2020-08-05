@@ -42,9 +42,11 @@ class KickCommand:
         help_text = "Command to kick any player on the server" \
                     "\nUsage: /kick <client id>(required) <ban time hours>(optional)"
         return help_text
+
     def on_error_command(self):
         ba.screenmessage(f"Use '/help {self.head}' for help about this command", transient=True,
                          clients=[self.client_id])
+
     def validate_command(self):
 
         if len(self.msg) < 2:
@@ -70,7 +72,7 @@ class KickCommand:
 
     def execute(self):
         self.ban_id = int(self.msg[1])
-        if len(self.msg) == 3: self.ban_time = int(self.msg[2])*60
+        if len(self.msg) == 3: self.ban_time = int(self.msg[2]) * 60
         if self.ban_time == -1:
             if not _ba.disconnect_client(client_id=self.ban_id):
                 ba.screenmessage("No such Client ID found!", transient=True,
