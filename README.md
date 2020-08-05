@@ -10,3 +10,5 @@ In python/ba/_hooks.py
       BombsquadChatCommands(msg,client_id).handlechatmessage()
    
   at the start of `filter_chat_message()`
+
+Edit the __init__.py file and add your id as owner
