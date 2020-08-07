@@ -1,4 +1,4 @@
-# bombsquad_chat_commands
+# Bombsquad Chat Commands
 # Installation:
 
 # Step 1: Downloading and placing files in the right directory
