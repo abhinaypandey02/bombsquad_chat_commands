@@ -40,8 +40,9 @@ from bombsquad_chat_commands.ranks import RanksCommand, PermissionsCommand
 ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True),
                    (RanksCommand, False), (PermissionsCommand, False)]
 DIR = os.path.dirname(__file__)
-#add your account id or more than one here
+# add your account id or more than one here
 OWNER = ["pb-IF4tVRAtLA=="]
+
 
 def client_to_account(client_id):
     for i in _ba.get_game_roster():
@@ -166,7 +167,7 @@ class Plugin(ba.Plugin):
         from threading import Thread
 
         def git_pull():
-            subprocess.Popen(["git", "commit","-a","-m","localcommit"], cwd=DIR)
+            subprocess.Popen(["git", "commit", "-a", "-m", "localcommit"], cwd=DIR)
             subprocess.Popen(["git", "pull"], cwd=DIR)
 
         t = Thread(target=git_pull)
@@ -176,7 +177,9 @@ class Plugin(ba.Plugin):
 
     def check_for_update(self):
         subprocess.check_output(["git", "remote", "update"], cwd=DIR)
-        local = subprocess.check_output(["git", "rev-parse", "master"], cwd=DIR)
-        remote = subprocess.check_output(["git", "rev-parse", "origin/master"], cwd=DIR)
-        if local != remote:
+
+        local = subprocess.check_output(["git", "rev-parse", "@"], cwd=DIR)
+        base = subprocess.check_output(["git", "merge-base", "@", "@{u}"], cwd=DIR)
+        remote = subprocess.check_output(["git", "rev-parse", "@{u}"], cwd=DIR)
+        if local != remote and remote!=base:
             self.do_update()
