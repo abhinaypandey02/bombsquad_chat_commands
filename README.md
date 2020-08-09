@@ -28,3 +28,4 @@ And delete the \_\_pycache__ folder in ba directory<br>
 
 # Step 3: Modifying server properties:
   Edit the \_\_init__.py file and add your id as owner
+
