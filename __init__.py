@@ -36,7 +36,9 @@ from bombsquad_chat_commands.ranks import RanksCommand, PermissionsCommand
 
 # ba_meta require api 6
 
+
 # The boolean specifies if the command is available for all
+#remove the command tuple from the list if you want to disable it
 ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True),
                    (RanksCommand, False), (PermissionsCommand, False)]
 DIR = os.path.dirname(__file__)
