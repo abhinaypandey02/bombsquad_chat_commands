@@ -167,7 +167,7 @@ class Plugin(ba.Plugin):
     def do_update(self):
 
         from threading import Thread
-        print(subprocess.check_output(["git", "commit", "-a", "-m", "localcommit"], cwd=DIR))
+        subprocess.check_output(["git", "commit", "-a", "-m", "localcommit"], cwd=DIR)
         def git_pull():
             subprocess.Popen(["git", "pull"], cwd=DIR)
 
@@ -175,10 +175,16 @@ class Plugin(ba.Plugin):
         t.start()
 
         print("UPDATING BOMBSQUAD CHAT COMMANDS PLEASE RESTART SERVER ONCE ITS DONE!")
+        open("dirtyenv","w+")
         sys.exit(0)
 
     def check_for_update(self):
-        print(subprocess.check_output(["git", "remote", "update"], cwd=DIR))
+        if os.path.exists('dirtyenv'):
+            os.remove('dirtyenv')
+            import time
+            time.sleep(5)
+            sys.exit(0)
+        subprocess.check_output(["git", "remote", "update"], cwd=DIR)
 
         local = subprocess.check_output(["git", "rev-parse", "@"], cwd=DIR)
         base = subprocess.check_output(["git", "merge-base", "@", "@{u}"], cwd=DIR)
