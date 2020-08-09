@@ -42,9 +42,9 @@ ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True
                    (RanksCommand, False), (PermissionsCommand, False)]
 DIR = os.path.dirname(__file__)
 #add your account id or more than one here
-OWNER = ["pb-IF4tVRAtLA=="]
+OWNER = ["pb-IF4tVRAtLAvfff=="]
 
-
+#fvfvf
 def client_to_account(client_id):
     for i in _ba.get_game_roster():
         if str(i['client_id']) == str(client_id):
