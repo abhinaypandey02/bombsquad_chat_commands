@@ -41,9 +41,8 @@ ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True
                    (RanksCommand, False), (PermissionsCommand, False)]
 DIR = os.path.dirname(__file__)
 #add your account id or more than one here
-OWNER = ["pb-IF4tVRAtLAvfff=="]
+OWNER = ["pb-IF4tVRAtLA=="]
 
-#fvfvf
 def client_to_account(client_id):
     for i in _ba.get_game_roster():
         if str(i['client_id']) == str(client_id):
@@ -167,6 +166,7 @@ class Plugin(ba.Plugin):
         from threading import Thread
 
         def git_pull():
+            subprocess.Popen(["git", "commit","-a","-m","localcommit"], cwd=DIR)
             subprocess.Popen(["git", "pull"], cwd=DIR)
 
         t = Thread(target=git_pull)
