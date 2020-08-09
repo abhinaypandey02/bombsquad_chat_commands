@@ -41,7 +41,7 @@ from bombsquad_chat_commands.ranks import RanksCommand, PermissionsCommand
 ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True),
                    (RanksCommand, False), (PermissionsCommand, False)]
 DIR = os.path.dirname(__file__)
-#add your account id here
+#add your account id or more than one here
 OWNER = ["pb-IF4tVRAtLA=="]
 
 
