@@ -1,7 +1,7 @@
 # Bombsquad Chat Commands
 # Installation:
 
-# Step 1: Downloading and placing files in the right directory
+# Step 1: Downloading and placing files in the right directory:
 
 Method 1: Using git-<br>
   Install git if not already installed using `sudo apt-get install git`<br>
@@ -14,7 +14,7 @@ Method 2: Manually downloading the files-<br>
 
 After both the steps you should see a folder _bombsquad_chat_commands_ in the mods folder.  <br>
 
-# Step 2: Adding the implementation in bombsquad files
+# Step 2: Adding the implementation in bombsquad files:
   In python/ba/_hooks.py <br>
   add:<br>
   
@@ -26,5 +26,5 @@ After both the steps you should see a folder _bombsquad_chat_commands_ in the mo
 
 And delete the \_\_pycache__ folder in ba directory<br>
 
-# Step 3: Modifying server properties<br>
+# Step 3: Modifying server properties:
   Edit the \_\_init__.py file and add your id as owner
