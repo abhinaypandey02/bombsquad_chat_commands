@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # -----------------------------------------------------------------------------
-  
+
 
 from __future__ import annotations
 
@@ -35,16 +35,16 @@ from bombsquad_chat_commands.moderation import KickCommand
 from bombsquad_chat_commands.ranks import RanksCommand, PermissionsCommand
 
 # ba_meta require api 6
- 
+
 
 # The boolean specifies if the command is available for all
-#remove the command tuple from the list if you want to disable it
+# remove the command tuple from the list if you want to disable it
 ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True),
                    (RanksCommand, False), (PermissionsCommand, False)]
 DIR = os.path.dirname(__file__)
 # add your account id or more than one here
 OWNER = ["pb-IF4tVRAtLA=="]
- 
+
 
 def client_to_account(client_id):
     for i in _ba.get_game_roster():
@@ -168,6 +168,7 @@ class Plugin(ba.Plugin):
 
         from threading import Thread
         subprocess.check_output(["git", "commit", "-a", "-m", "localcommit"], cwd=DIR)
+
         def git_pull():
             subprocess.Popen(["git", "pull"], cwd=DIR)
 
@@ -175,7 +176,7 @@ class Plugin(ba.Plugin):
         t.start()
 
         print("UPDATING BOMBSQUAD CHAT COMMANDS PLEASE RESTART SERVER ONCE ITS DONE!")
-        open("dirtyenv","w+")
+        open("dirtyenv", "w+")
         sys.exit(0)
 
     def check_for_update(self):
@@ -189,5 +190,5 @@ class Plugin(ba.Plugin):
         local = subprocess.check_output(["git", "rev-parse", "@"], cwd=DIR)
         base = subprocess.check_output(["git", "merge-base", "@", "@{u}"], cwd=DIR)
         remote = subprocess.check_output(["git", "rev-parse", "@{u}"], cwd=DIR)
-        if local != remote and remote!=base:
+        if local != remote and remote != base:
             self.do_update()
