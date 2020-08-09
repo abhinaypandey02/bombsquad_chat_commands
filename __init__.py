@@ -168,12 +168,18 @@ class Plugin(ba.Plugin):
 
         from threading import Thread
 
-        def git_pull():
+        def git_commit():
             subprocess.Popen(["git", "commit", "-a", "-m", "localcommit"], cwd=DIR)
+        def git_pull():
             subprocess.Popen(["git", "pull"], cwd=DIR)
 
+        t = Thread(target=git_commit)
+        t.start()
+        t.join()
         t = Thread(target=git_pull)
         t.start()
+        t.join()
+
         print("UPDATING BOMBSQUAD CHAT COMMANDS PLEASE RESTART SERVER ONCE ITS DONE!")
         sys.exit(0)
 
