@@ -167,7 +167,7 @@ class Plugin(ba.Plugin):
     def do_update(self):
 
         from threading import Thread
-        subprocess.check_output(["git", "commit", "-a", "-m", "localcommit"], cwd=DIR)
+        print(subprocess.check_output(["git", "commit", "-a", "-m", "localcommit"], cwd=DIR))
         def git_pull():
             subprocess.Popen(["git", "pull"], cwd=DIR)
 
@@ -178,7 +178,7 @@ class Plugin(ba.Plugin):
         sys.exit(0)
 
     def check_for_update(self):
-        subprocess.check_output(["git", "remote", "update"], cwd=DIR)
+        print(subprocess.check_output(["git", "remote", "update"], cwd=DIR))
 
         local = subprocess.check_output(["git", "rev-parse", "@"], cwd=DIR)
         base = subprocess.check_output(["git", "merge-base", "@", "@{u}"], cwd=DIR)
