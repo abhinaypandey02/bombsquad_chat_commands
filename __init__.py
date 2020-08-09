@@ -25,6 +25,8 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
+import sys
 
 import _ba
 import ba
@@ -38,7 +40,7 @@ from bombsquad_chat_commands.ranks import RanksCommand, PermissionsCommand
 # The boolean specifies if the command is available for all
 ACTIVE_COMMANDS = [(KickCommand, False), (InfoCommand, True), (HelpCommand, True),
                    (RanksCommand, False), (PermissionsCommand, False)]
-DIR = __file__.replace(os.path.basename(__file__), '')
+DIR = os.path.dirname(__file__)
 OWNER = ["pb-IF4tVRAtLA=="]
 
 
@@ -95,66 +97,86 @@ class BombsquadChatCommands:
                     return
 
 
-def validate_installation(filename, file_location, test_string, test_function,
-                          insert_data):
-    try:
-        with open(os.path.join(file_location), "r") as f:
-            f_read = f.read()
-    except:
-        print(f"{filename} not found / Couldn't open file!")
-        return False
-    if not test_string in f_read:
-        print(f"Commands are not installed in {filename}!\n"
-              "Installing\n")
-        if handle_file(file_location, test_function, insert_data):
-            print(f"Installed Successfully in {filename}! Restarting!")
-            import sys
-            sys.exit(0)
-        else:
-            print("Error in Installation!")
-            import sys
-            sys.exit(1)
-    else:
-        return True
-
-
-def handle_file(file_location, test_function, insert_data):
-    try:
-        print(f"Searching for {file_location}")
-        with open(file_location, "r") as f:
-            temp_read = f.readlines()
-            print(f"Checking for {test_function} line")
-            flag = False
-            for i, line in enumerate(temp_read):
-                if test_function in line:
-                    flag = True
-                    print("Line found! Installing below this line!")
-                    temp_read.insert(i + 1, insert_data)
-
-            temp_read = "".join(temp_read)
-            if not flag:
-                print("File Scheme has been changed by Eric!"
-                      "Please hit me up on github so I can update the commands!"
-                      "Meanwhile switch off my plugin by changing value back to false in config.py")
-                return False
-    except:
-        print(f"{filename} not found / Couldn't open file!")
-        return False
-    try:
-        with open(file_location, "w") as f:
-            print("Writing back on the file!")
-            f.write(temp_read)
-            return True
-    except:
-        print(f"{filename} not found / Couldn't write file!")
-        return False
-
-
 # ba_meta export plugin
 class Plugin(ba.Plugin):
     def on_app_launch(self) -> None:
+
+        self.check_for_update()
+
         insert_data_hooks = "    from bombsquad_chat_commands import BombsquadChatCommands\n" \
                             "    BombsquadChatCommands(msg,client_id).handlechatmessage()\n"
-        if validate_installation("_hooks.py", os.path.join('ba_data', 'python', 'ba', "_hooks.py"),
-                                 insert_data_hooks, "filter_chat_message", insert_data_hooks):
+        if self.validate_installation("_hooks.py",
+                                      os.path.join('ba_data', 'python', 'ba', "_hooks.py"),
+                                      insert_data_hooks, "filter_chat_message", insert_data_hooks):
             print("Installation verified in _hooks.py.")
+
+    def validate_installation(self, filename, file_location, test_string, test_function,
+                              insert_data):
+        try:
+            with open(os.path.join(file_location), "r") as f:
+                f_read = f.read()
+        except:
+            print(f"{filename} not found / Couldn't open file!")
+            return False
+        if not test_string in f_read:
+            print(f"Commands are not installed in {filename}!\n"
+                  "Installing\n")
+            if self.handle_file(file_location, test_function, insert_data):
+                print(f"Installed Successfully in {filename}! Restarting!")
+                sys.exit(0)
+            else:
+                print("Error in Installation!")
+
+                sys.exit(1)
+        else:
+            return True
+
+    def handle_file(self, file_location, test_function, insert_data):
+        try:
+            print(f"Searching for {file_location}")
+            with open(file_location, "r") as f:
+                temp_read = f.readlines()
+                print(f"Checking for {test_function} line")
+                flag = False
+                for i, line in enumerate(temp_read):
+                    if test_function in line:
+                        flag = True
+                        print("Line found! Installing below this line!")
+                        temp_read.insert(i + 1, insert_data)
+
+                temp_read = "".join(temp_read)
+                if not flag:
+                    print("File Scheme has been changed by Eric!"
+                          "Please hit me up on github so I can update the commands!"
+                          "Meanwhile switch off my plugin by changing value back to false in config.py")
+                    return False
+        except:
+            print(f"{filename} not found / Couldn't open file!")
+            return False
+        try:
+            with open(file_location, "w") as f:
+                print("Writing back on the file!")
+                f.write(temp_read)
+                return True
+        except:
+            print(f"{filename} not found / Couldn't write file!")
+            return False
+
+    def do_update(self):
+
+        from threading import Thread
+
+        def git_pull():
+            subprocess.Popen(["git", "pull"], cwd=DIR)
+            sys.exit(0)
+
+        t = Thread(target=git_pull)
+        t.start()
+        sys.exit(0)
+
+    def check_for_update(self):
+        subprocess.check_output(["git", "remote", "update"], cwd=DIR)
+        local = subprocess.check_output(["git", "rev-parse", "master"], cwd=DIR)
+        remote = subprocess.check_output(["git", "rev-parse", "origin/master"], cwd=DIR)
+        if local != remote:
+            self.do_update()
